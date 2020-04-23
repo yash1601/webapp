@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form method="POST" action="" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        
+          <div class="form-row">
+            <div class="col">
+                {{ form.select.label(class="form-control-label") }}
+                {{ form.select(class="form-control form-control-lg") }}
+
+              </div>
+              <div class="col">
+                {{ form.search.label(class="form-control-label") }}
+                {{ form.search(class="form-control form-control-lg") }}
+              </div>
+            </div>
+        </fieldset>
+      <div class="form-group">
+        <button type="submit"><i class="fa fa-search">
+        {{ form.submit(class="btn btn-outline-info") }}
+        </i></button>
+      </div>
+
+    </form>
+  {% for post in posts %}
+        <article class="media content-section">
+          <form method="POST" action="{{ url_for('upvote', post_id=post.id) }}">
+            
+            <button id="clicked" type="submit" class="btn btn-link" data-toggle="popover" title="Upvote" data-content="You can upvote posts!">
+
+                <span class="fa fa-arrow-up"></span>
+                             
+            </button>
+             <script type="text/javascript">
+                function myFunction() {
+                  document.getElementById("clicked").style.color = "green";
+                }
+              </script>
+
+          </form>
+          {% if current_user.is_authenticated %}
+            {% if not (post in blist) %}
+              <form method="POST" action="{{ url_for('bookmark', post_id=post.id) }}">
+                
+                <button id="clicked" type="submit" class="btn btn-link" data-toggle="popover" title="Bookmark" data-content="You can upvote posts!">
+
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+                             
+                </button>
+
+              </form>
+            {% endif %}
+          {% endif %}
+          <div style="width:20px; height:20px; border: 1px solid black; text-align: center; background-color: #D4EDFE; padding-bottom: 25px;">
+            <p>{{ post.upvotes }}</p>
+          </div>
+          <img class="rounded-circle article-img" style="padding-left:5px;" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <p>by <a href="{{ url_for('displayuser', user_id = post.author.id) }}"> {{ post.author.username }} </a></p>
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+              
+            </div>
+            <h2><a class="article-title" href="{{ url_for('post_display', post_id=post.id) }}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.summary }}</p>
+          </div>
+        
+        </article>
+    {% endfor %}
+{% endblock content %}

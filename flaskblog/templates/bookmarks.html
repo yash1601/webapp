@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+	<ul>
+    {% for post in posts %}
+    	<li>
+    		<form method="POST" action="{{ url_for('removebmark', post_id = post.id) }}" >
+		    	<button type="submit" class="btn btn-link" data-toggle="popover" title="Remove Bookmark" >
+		    		<i class="fa fa-times" aria-hidden="true"></i>
+		    	</button>
+		    </form>
+	    	<h2><a class="article-title" href="{{ url_for('post_display', post_id=post.id) }}">{{ post.title }}</a></h2>
+	    	<p>{{ post.summary }}</p>
+	    	<hr>
+	    </li>
+    {% endfor %}
+	</ul>
+{% endblock content %}

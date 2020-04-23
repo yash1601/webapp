@@ -1,0 +1,10 @@
+ {% extends "layout.html" %}
+{% block content %}
+	
+    <h1 style="color:#ABEBC6;">{{ post.title }}</h1>
+    <hr>
+    <p>by {{ post.author.username }}</p>
+    
+    <hr>
+    <p class="article-content" style="color:#AED6F1;">{{ post.content }}<p>
+{% endblock content %}

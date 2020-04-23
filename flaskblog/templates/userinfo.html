@@ -1,0 +1,20 @@
+ {% extends "layout.html" %}
+{% block content %}
+    <div class="col-md-8">
+            <div class="content-section">
+              <h3>Account</h3>
+              <p class='text-muted'>Account information.
+              	<div class="image-dislay" style="height: 100px; width:100px;">
+              		<img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+
+              	</div>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-light"><p>name: </p>{{user.username}}</li>
+                  <li class="list-group-item list-group-item-light"><p>email: </p><a href="mailto:{{user.email}}">{{ user.email }}</a></li>
+                  <li class="list-group-item list-group-item-light"><p>user reference: </p>{{user.id}}</li>
+                  
+                </ul>
+              </p>
+            </div>
+          </div>
+{% endblock content %}
