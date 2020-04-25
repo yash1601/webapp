@@ -22,6 +22,11 @@ user_bookmarks = db.Table('user_bookmarks',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
 )
+
+post_comments = db.Table('post_comments',
+	db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+	db.Column('comment_id', db.Integer, db.ForeignKey('comment.id'))
+)
 	
 
 class User(db.Model, UserMixin):
@@ -33,7 +38,7 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String(60), nullable = False)
 	posts = db.relationship('Post', backref = 'author', lazy = True)
 	bookmarks = db.relationship('Post', secondary=user_bookmarks, backref=db.backref('users', lazy='dynamic'))
-	
+	comments = db.relationship('Comment', backref = 'commenter', lazy= True)
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}',  '{self.image_file}' )"
@@ -65,12 +70,17 @@ class Post(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 	upvotes = db.Column(db.Integer, default=0)
 	downvotes = db.Column(db.Integer, default=0)
+	comments = db.relationship('Comment', secondary=post_comments, backref=db.backref('posted_on', lazy='dynamic'))
 
 	
 	def __repr__(self):
 		return f"User('{self.title}', '{self.date_posted}' )"
 
 
+class Comment(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	text = db.Column(db.Text)
+	user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 db.create_all()
 

@@ -88,3 +88,11 @@ class UpvoteForm(FlaskForm):
 
 class BookmarkForm(FlaskForm):
 	submit = SubmitField('')
+
+class MessageForm(FlaskForm):
+	text = TextAreaField('Type your message here: ', validators=[DataRequired(), Length(min=5, max=600)])
+	submit = SubmitField('Send')
+
+class CommentForm(FlaskForm):
+	text = TextAreaField('Leave a Comment:', validators=[Length(min=5, max=600)])
+	submit = SubmitField('submit')

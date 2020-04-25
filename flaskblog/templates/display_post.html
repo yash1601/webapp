@@ -7,4 +7,35 @@
     
     <hr>
     <p class="article-content" style="color:#AED6F1;">{{ post.content }}<p>
+    <hr>
+
+    <h4>Comments*</h4>
+    <form method="POST" action="" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        
+          <div class="form-row">
+            <div class="col">
+                {{ form.text.label(class="form-control-label") }}
+                {{ form.text(class="form-control form-control-lg") }}
+
+              </div>
+              
+            </div>
+        </fieldset>
+      <div class="form-group">
+        <button type="submit"><i class="fa fa-comments">
+        {{ form.submit(class="btn btn-outline-info") }}
+        </i></button>
+      </div>
+
+    </form>
+    {% for comment in comments %}
+    	<hr>
+		<a href="{{ url_for('displayuser', user_id = comment.commenter.id) }}"><h6>{{comment.commenter.username}}</h6></a>
+    		<div style="width:600px; height:25px;">
+    			{{comment.text}}
+    		
+    		</div>
+    {% endfor %}
 {% endblock content %}

@@ -1,8 +1,8 @@
 import os
 import secrets
 from flask import render_template,url_for, flash,  redirect, request, abort, session
-from flaskblog.forms import LoginForm, RegistrationForm, PostForm, UpdateForm, RequestResetForm, ResetPasswordForm, SearchForm, UpvoteForm, BookmarkForm
-from flaskblog.models import User, Post
+from flaskblog.forms import CommentForm, MessageForm, LoginForm, RegistrationForm, PostForm, UpdateForm, RequestResetForm, ResetPasswordForm, SearchForm, UpvoteForm, BookmarkForm
+from flaskblog.models import User, Post, Comment
 from flaskblog.__innit__ import app, db, mail
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
@@ -111,10 +111,22 @@ def new():
 
 
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
+@login_required
 def post_display(post_id):
+	test_id = post_id
 	post = Post.query.get(int(post_id))
-	return render_template('display_post.html', title='post.id', post = post)
+	coms = post.comments
+	form = CommentForm()
+	x = current_user.id
+	if form.validate_on_submit():
+		comment = Comment(text=form.text.data, user = x)
+		db.session.add(comment)
+		comment.posted_on.append(post)
+		db.session.commit()
+		flash('Comment added succesfully', 'success')
+		return redirect(url_for('home'))
+	return render_template('display_post.html', title='post.id', post = post, comments = coms, form = form)
 
 
 
@@ -247,3 +259,10 @@ def removebmark(post_id):
 def displayuser(user_id):
 	user = User.query.get(user_id)
 	return render_template('userinfo.html', title='user info', user = user)
+
+@app.route("/message/<int:user_id>", methods=['GET', 'POST'])
+@login_required
+def message(user_id):
+	pass
+
+	

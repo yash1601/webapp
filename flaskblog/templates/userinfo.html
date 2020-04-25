@@ -8,6 +8,13 @@
               		<img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
 
               	</div>
+              	{% if not user == current_user %}
+	              	<form method="POST" action="{{ url_for('message', user_id = user.id) }}">
+		              	<button type="submit" class="btn btn-link" data-toggle="popover" title="Direct Message">
+		              		<i class="fa fa-inbox" aria-hidden="true"></i>
+		              	</button>
+	              	</form>
+              	{% endif %}
                 <ul class="list-group">
                   <li class="list-group-item list-group-item-light"><p>name: </p>{{user.username}}</li>
                   <li class="list-group-item list-group-item-light"><p>email: </p><a href="mailto:{{user.email}}">{{ user.email }}</a></li>
