@@ -39,6 +39,9 @@ class User(db.Model, UserMixin):
 	posts = db.relationship('Post', backref = 'author', lazy = True)
 	bookmarks = db.relationship('Post', secondary=user_bookmarks, backref=db.backref('users', lazy='dynamic'))
 	comments = db.relationship('Comment', backref = 'commenter', lazy= True)
+	messages = db.relationship('Message', backref = 'sender', lazy = 'dynamic', foreign_keys = 'Message.uidsender')
+	receiver = db.relationship('Message', backref = 'received', lazy = 'dynamic', foreign_keys = 'Message.uidreceiver')
+
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}',  '{self.image_file}' )"
@@ -81,6 +84,13 @@ class Comment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	text = db.Column(db.Text)
 	user = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Message(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	uidsender = db.Column(db.Integer, db.ForeignKey('user.id'))
+	uidreceiver = db.Column(db.Integer, db.ForeignKey('user.id'))
+	text = db.Column(db.Text)
+	
 
 db.create_all()
 

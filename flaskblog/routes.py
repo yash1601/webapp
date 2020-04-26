@@ -19,7 +19,10 @@ def home():
 	form3 = BookmarkForm()
 	if current_user.is_authenticated:
 		blist = current_user.bookmarks 
-
+	if form.validate_on_submit():
+		x = form.select.data
+		y = form.search.data
+		return redirect(url_for('searchresult', ref = x, arg = y))
 	return render_template('home.html', posts=posts, form = form, form2 = form2, form3 = form3, blist = blist)
 
 
@@ -263,6 +266,23 @@ def displayuser(user_id):
 @app.route("/message/<int:user_id>", methods=['GET', 'POST'])
 @login_required
 def message(user_id):
-	pass
+	form = MessageForm()
+	receiver = User.query.get(user_id)
+	x = current_user.id
+	if form.validate_on_submit():
+		message = Message(sender=x, received=user_id, text = form.text.data)
+		db.session.add(message)
+		db.session.commit()
+		flash('message sent successfully', 'success')
+		return redirect(url_for('home'))
+	return render_template('message.html', title= 'Message', form = form, user = receiver)
 
 	
+
+@app.route("/searchresult/<int:ref>/arg")
+def searchresult(ref, arg):
+	if ref == 1:
+		posts = Post.query.filter_by(author = arg)
+	else :
+		posts = Post.query.filter_by(title = arg)
+	return render_template('searchresult.html', title = 'Results', posts = posts)

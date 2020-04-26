@@ -1,28 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <form method="POST" action="" enctype="multipart/form-data">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-        
-          <div class="form-row">
-            <div class="col">
-                {{ form.select.label(class="form-control-label") }}
-                {{ form.select(class="form-control form-control-lg") }}
-
-              </div>
-              <div class="col">
-                {{ form.search.label(class="form-control-label") }}
-                {{ form.search(class="form-control form-control-lg") }}
-              </div>
-            </div>
-        </fieldset>
-      <div class="form-group">
-        <button type="submit"><i class="fa fa-search">
-        {{ form.submit(class="btn btn-outline-info") }}
-        </i></button>
-      </div>
-
-    </form>
+  
   {% for post in posts %}
         <article class="media content-section">
           {% if not post.author == current_user %}
